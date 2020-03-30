@@ -78,7 +78,7 @@ public class StrUtils {
 
         if (index < 0) return text;
 
-        return text.substring(index+1, text.length());
+        return text.substring(index+border.length(), text.length());
     }
 
     /**
