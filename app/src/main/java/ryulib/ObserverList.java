@@ -17,7 +17,7 @@ public class ObserverList {
 		messageControl.setOnMessageListener(new OnMessageListener() {
 			@Override
 			public void onMessage(Message message) {
-				Log.i("ObserverList", ((JSONObject) message.obj).toString());
+//				Log.i("ObserverList", ((JSONObject) message.obj).toString());
 
 				for (int i=0; i< list.size(); i++) {
 					do_Notify(list.get(i), (JSONObject) message.obj);
@@ -41,7 +41,7 @@ public class ObserverList {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void do_Notify(Object object, JSONObject packet) {
-		Log.i("ObserverList", object.toString());
+//		Log.i("ObserverList", object.toString());
 
 		Class _Class = object.getClass();
 		Class[] _ParameterType = new Class[] { JSONObject.class };
