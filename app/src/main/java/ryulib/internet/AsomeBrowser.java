@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Message;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -78,14 +80,18 @@ public class AsomeBrowser extends WebViewClient {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setDatabaseEnabled(true);
-        settings.setAppCacheEnabled(false);
+        settings.setAppCacheEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setSupportMultipleWindows(true);
         settings.setAllowContentAccess(true);
         settings.setAllowFileAccessFromFileURLs(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptCookie(true);
+            cookieManager.setAcceptThirdPartyCookies(webView, true);
+
             try {
                 Method m3 = WebSettings.class.getMethod("setDatabasePath", new Class[]{String.class});
                 m3.invoke(settings, "/data/data/" + context.getPackageName() + "/databases/");
@@ -108,10 +114,21 @@ public class AsomeBrowser extends WebViewClient {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onPageFinished(WebView view, String url) {
         Log.i("onPageFinished", url);
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.getInstance().sync();
+        } else {
+            CookieManager.getInstance().flush();
+        }
     }
+
+    public void setOnShowkeyboard(OnNotifyListener event) { onShowKeyboard_ = event; }
+    public void setOnURL(OnStringListener event) { onURL_ = event; }
+    public void setOnCommand(OnStringListener event) { onCommand_ = event; }
 
     private Context context_;
     private WebView webView;
