@@ -22,7 +22,7 @@ public class WebAppInterface {
     }
 
     @JavascriptInterface
-    public void run_cmd(String msg) {
+    public void command(String msg) {
         if (onCommand != null) onCommand.onString(this, msg);
     }
 
