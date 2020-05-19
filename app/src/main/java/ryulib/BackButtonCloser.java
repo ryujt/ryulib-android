@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.widget.Toast;
 
 public class BackButtonCloser {
-
     public BackButtonCloser(Activity context) {
         this.activity = context;
     }
@@ -12,18 +11,21 @@ public class BackButtonCloser {
     public void pressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 1000) {
             backKeyPressedTime = System.currentTimeMillis();
-            toast = Toast.makeText(activity, "Click the back button again to close this app.", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(activity, msg_, Toast.LENGTH_SHORT);
             toast.show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 1000) {
-            activity.finish();
-            toast.cancel();
+            activity.finishAffinity();
+            System.runFinalization();
+            System.exit(0);
         }
     }
 
+    public void setMsg(String msg) { msg_ = msg; }
+
+    private String msg_ = "Click the back button again to close this app.";
     private long backKeyPressedTime = 0;
     private Activity activity;
     private Toast toast;
-
 }
